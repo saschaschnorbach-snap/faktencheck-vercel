@@ -1,6 +1,6 @@
 # FaktenCheck - Erkenne Manipulation
 
-Ein interaktives Spiel zum Erkennen von Desinformation und Fake News. Inspiriert von [Harmony Square](https://harmonysquare.game) und [VoteGuard](https://misinfo-game2-0.vercel.app/).
+Ein interaktives Spiel zum Erkennen von Desinformation und Fake News.
 
 ## Features
 

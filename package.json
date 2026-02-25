@@ -1,0 +1,10 @@
+{
+  "name": "faktencheck-game",
+  "version": "1.0.0",
+  "description": "FaktenCheck - Ein Quiz zum Erkennen politischer Manipulation",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}

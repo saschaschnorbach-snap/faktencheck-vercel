@@ -39,8 +39,5 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ],
-  "env": {
-    "ADMIN_PASSWORD": "@admin-password"
-  }
+  ]
 }

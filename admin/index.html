@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaktenCheck Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #0f172a;
+            --bg-light: #1e293b;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .login-logo { font-size: 60px; margin-bottom: 16px; }
+        .login-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .login-subtitle { color: var(--text-muted); margin-bottom: 32px; }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+        
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header-icon { font-size: 32px; }
+        .header h1 { font-size: 24px; font-weight: 800; }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: var(--card);
+            padding: 8px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        
+        .tab:hover { color: var(--text); }
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        
+        /* Forms */
+        .form-group { margin-bottom: 20px; }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-textarea { resize: vertical; min-height: 100px; }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .form-checkbox input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-sm { padding: 10px 16px; font-size: 13px; }
+        .btn-block { width: 100%; }
+        
+        /* Section Card */
+        .section-card {
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        
+        .section-body {
+            padding: 24px;
+        }
+        
+        /* Stories List */
+        .stories-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .story-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        
+        .story-item:hover { background: var(--bg-light); }
+        .story-item:last-child { border-bottom: none; }
+        
+        .story-status {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .story-status.true { background: rgba(16, 185, 129, 0.15); }
+        .story-status.false { background: rgba(239, 68, 68, 0.15); }
+        
+        .story-content { flex: 1; min-width: 0; }
+        
+        .story-headline {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .story-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+        
+        .story-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+        .badge-muted { background: var(--border); color: var(--text-muted); }
+        .badge-primary { background: rgba(124, 58, 237, 0.15); color: var(--primary); }
+        
+        /* Results Table */
+        .results-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .result-item:last-child { border-bottom: none; }
+        
+        .result-rank {
+            width: 36px;
+            height: 36px;
+            background: var(--bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .result-rank.gold { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .result-rank.silver { background: rgba(148, 163, 184, 0.2); color: #94a3b8; }
+        .result-rank.bronze { background: rgba(180, 83, 9, 0.2); color: #d97706; }
+        
+        .result-info { flex: 1; }
+        .result-date { font-size: 14px; font-weight: 600; }
+        .result-details { font-size: 12px; color: var(--text-muted); }
+        
+        .result-score {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal-title { font-size: 20px; font-weight: 700; }
+        
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--bg);
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover { color: var(--text); background: var(--border); }
+        
+        .modal-body { padding: 24px; }
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Tricks Input */
+        .tricks-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .trick-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .trick-tag button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            z-index: 1001;
+        }
+        
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        
+        .toast-icon { font-size: 24px; }
+        .toast-message { font-size: 14px; font-weight: 500; }
+        
+        /* Alert */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert-info {
+            background: rgba(124, 58, 237, 0.15);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            color: var(--primary);
+        }
+        
+        .alert-icon { font-size: 20px; flex-shrink: 0; }
+        .alert-content { font-size: 14px; }
+        
+        /* Empty State */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        
+        .empty-state-icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state-text { font-size: 15px; }
+        
+        /* Hidden */
+        .hidden { display: none !important; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 16px; text-align: center; }
+            .header-actions { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .story-item { flex-direction: column; }
+            .story-actions { width: 100%; justify-content: flex-end; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="login-screen">
+            <div class="login-card">
+                <div class="login-logo">🛡️</div>
+                <h1 class="login-title">FaktenCheck Admin</h1>
+                <p class="login-subtitle">Melde dich an, um das Spiel zu verwalten</p>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label class="form-label">Passwort</label>
+                        <input type="password" class="form-input" id="password" placeholder="Admin-Passwort eingeben" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">🔐 Anmelden</button>
+                </form>
+                
+                <p style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+                    Standard-Passwort: <code style="background: var(--bg); padding: 2px 6px; border-radius: 4px;">admin123</code>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Dashboard -->
+        <div id="dashboard" class="container hidden">
+            <header class="header">
+                <div class="header-title">
+                    <span class="header-icon">🛡️</span>
+                    <h1>FaktenCheck Admin</h1>
+                </div>
+                <div class="header-actions">
+                    <a href="../" class="btn btn-success btn-sm">🎮 Zum Spiel</a>
+                    <button class="btn btn-outline btn-sm" id="export-btn">📥 Export</button>
+                    <button class="btn btn-outline btn-sm" id="logout-btn">🚪 Abmelden</button>
+                </div>
+            </header>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="overview">📊 Übersicht</button>
+                <button class="tab" data-tab="stories">📰 Stories</button>
+                <button class="tab" data-tab="results">🏆 Ergebnisse</button>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div id="tab-overview" class="tab-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total">0</div>
+                        <div class="stat-label">Stories gesamt</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-active" style="color: var(--success)">0</div>
+                        <div class="stat-label">Aktiv</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-true" style="color: var(--success)">0</div>
+                        <div class="stat-label">Wahre News</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-false" style="color: var(--danger)">0</div>
+                        <div class="stat-label">Fake News</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-plays" style="color: var(--primary)">0</div>
+                        <div class="stat-label">Spiele</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-avg" style="color: #fbbf24">0%</div>
+                        <div class="stat-label">Ø Richtig</div>
+                    </div>
+                </div>
+                
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">📈 Letzte Ergebnisse</h2>
+                    </div>
+                    <div class="results-list" id="recent-results">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📊</div>
+                            <div class="empty-state-text">Noch keine Spielergebnisse vorhanden</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stories Tab -->
+            <div id="tab-stories" class="tab-content hidden">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">📰 Stories verwalten</h2>
+                        <button class="btn btn-primary btn-sm" id="add-story-btn">➕ Neue Story</button>
+                    </div>
+                    <div class="stories-list" id="stories-list">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📰</div>
+                            <div class="empty-state-text">Lade Stories...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Tab -->
+            <div id="tab-results" class="tab-content hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total-plays">0</div>
+                        <div class="stat-label">Spiele gesamt</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-best-score" style="color: #fbbf24">0</div>
+                        <div class="stat-label">Highscore</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-avg-score" style="color: var(--primary)">0</div>
+                        <div class="stat-label">Ø Punkte</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-total-correct" style="color: var(--success)">0</div>
+                        <div class="stat-label">Richtige Antworten</div>
+                    </div>
+                </div>
+                
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">🏆 Alle Ergebnisse</h2>
+                        <button class="btn btn-danger btn-sm" id="clear-results-btn">🗑️ Löschen</button>
+                    </div>
+                    <div class="results-list" id="all-results">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">🏆</div>
+                            <div class="empty-state-text">Noch keine Spielergebnisse vorhanden</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Story Modal -->
+    <div class="modal-overlay" id="story-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Neue Story</h3>
+                <button class="modal-close" id="modal-close">×</button>
+            </div>
+            <form id="story-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Überschrift *</label>
+                        <input type="text" class="form-input" id="story-headline" required placeholder="Die Schlagzeile der Nachricht">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Quelle *</label>
+                            <input type="text" class="form-input" id="story-source" required placeholder="z.B. Tagesschau">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Wahrheitsgehalt *</label>
+                            <select class="form-select" id="story-isTrue" required>
+                                <option value="true">✅ Vertrauenswürdig</option>
+                                <option value="false">🚫 Manipulation</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Inhalt *</label>
+                        <textarea class="form-textarea" id="story-content" required placeholder="Der vollständige Text der Nachricht"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Erklärung *</label>
+                        <textarea class="form-textarea" id="story-explanation" required placeholder="Warum ist diese Nachricht wahr/falsch?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Manipulationstricks</label>
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" class="form-input" id="trick-input" placeholder="Trick eingeben + Enter">
+                            <button type="button" class="btn btn-outline btn-sm" id="add-trick-btn">+</button>
+                        </div>
+                        <div class="tricks-input" id="tricks-list"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="story-active" checked>
+                            <span>Story ist aktiv</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="cancel-btn">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toast-icon">✅</span>
+        <span class="toast-message" id="toast-message">Erfolgreich</span>
+    </div>
+    
+    <script>
+        // Default Stories (fallback)
+        const DEFAULT_STORIES = [
+            { id: 1, headline: "Ampel-Koalition einigt sich auf Kompromiss beim Bürgergeld", source: "Tagesschau", content: "Nach wochenlangen Verhandlungen haben sich SPD, Grüne und FDP auf einen Kompromiss beim Bürgergeld geeinigt.", isTrue: true, explanation: "Seriöse öffentlich-rechtliche Quelle mit konkreten Details.", tricks: [], active: true },
+            { id: 2, headline: "SKANDAL! Geheime Dokumente beweisen massiven Wahlbetrug!", source: "freiheit-deutschland.net", content: "Ein mutiger Whistleblower hat uns exklusiv Dokumente zugespielt, die beweisen: Die Bundestagswahl wurde manipuliert!", isTrue: false, explanation: "Typische Desinformation: Panikmache, anonyme Quellen, Verschwörungsnarrative.", tricks: ["Panikmache", "Verschwörungstheorie", "Unseriöse Quelle"], active: true },
+            { id: 3, headline: "Bundesverfassungsgericht kippt Nachtragshaushalt", source: "Süddeutsche Zeitung", content: "Das Bundesverfassungsgericht hat Teile des Nachtragshaushalts für verfassungswidrig erklärt.", isTrue: true, explanation: "Präzise Angaben, konkrete Institution, verifizierbar.", tricks: [], active: true },
+            { id: 4, headline: "Habeck: 'Deutsche sollen weniger duschen'", source: "patriot-news24.de", content: "In einem geheimen Treffen soll der Minister gesagt haben, dass Deutsche auf Duschen verzichten sollen.", isTrue: false, explanation: "Fake-Zitat: geheimes Treffen, anonymer Insider, unseriöse Quelle.", tricks: ["Anonyme Quellen", "Emotionale Sprache"], active: true },
+            { id: 5, headline: "EU-Parlament stimmt für Verbrenner-Aus ab 2035", source: "Reuters", content: "Das EU-Parlament hat für das Ende des Verbrennungsmotors bei Neuwagen ab 2035 gestimmt.", isTrue: true, explanation: "Renommierte Nachrichtenagentur mit konkreten Details.", tricks: [], active: true },
+            { id: 6, headline: "EILMELDUNG: Regierung plant 10 Millionen Migranten pro Jahr!", source: "wahrheit-aktuell.com", content: "Aus geheimen Dokumenten geht hervor: Die Ampel plant jährlich 10 Millionen Migranten aufzunehmen!", isTrue: false, explanation: "Unrealistische Zahlen, Verschwörungstheorie, keine Belege.", tricks: ["Verschwörungstheorie", "Panikmache", "Fehlende Quellen"], active: true },
+            { id: 7, headline: "Bund und Länder einigen sich auf Corona-Maßnahmen", source: "ZDF heute", content: "Bei der Ministerpräsidentenkonferenz wurde ein gemeinsamer Kurs für den Herbst vereinbart.", isTrue: true, explanation: "Öffentlich-rechtlicher Rundfunk, konkrete Institutionen genannt.", tricks: [], active: true },
+            { id: 8, headline: "Putin droht: Gas wird komplett abgedreht!", source: "breaking-politik.de", content: "In einer dramatischen Rede soll Putin gedroht haben, kein Gas mehr zu liefern!", isTrue: false, explanation: "Keine Quellenangabe, Panikmache, unseriöse Quelle.", tricks: ["Fehlende Quellen", "Panikmache", "Emotionale Sprache"], active: true },
+            { id: 9, headline: "Rentenpaket II: Rentenniveau bei 48 Prozent", source: "Handelsblatt", content: "Bundesarbeitsminister Heil hat die Eckpunkte des Rentenpakets II vorgestellt.", isTrue: true, explanation: "Seriöse Wirtschaftszeitung, konkrete Zahlen, auch kritische Stimmen.", tricks: [], active: true },
+            { id: 10, headline: "Enthüllt: Geheime Millionen-Spenden aus Russland!", source: "enthuellung-jetzt.net", content: "ALLE deutschen Parteien haben heimlich Millionen von russischen Oligarchen erhalten!", isTrue: false, explanation: "Keine Beweise, pauschale Anschuldigungen, 'Lügenpresse'-Narrativ.", tricks: ["Fehlende Quellen", "Verschwörungstheorie"], active: true }
+        ];
+        
+        // Admin password (in production, this should be server-side)
+        const ADMIN_PASSWORD = 'admin123';
+        
+        // State
+        let isLoggedIn = localStorage.getItem('faktencheck_admin_logged_in') === 'true';
+        let stories = [];
+        let gameResults = [];
+        let editingStoryId = null;
+        let currentTricks = [];
+        
+        // Initialize
+        function init() {
+            loadStories();
+            loadResults();
+            
+            if (isLoggedIn) {
+                showDashboard();
+            }
+            
+            setupEventListeners();
+        }
+        
+        // Storage functions
+        function loadStories() {
+            const saved = localStorage.getItem('faktencheck_stories');
+            stories = saved ? JSON.parse(saved) : [...DEFAULT_STORIES];
+        }
+        
+        function saveStories() {
+            localStorage.setItem('faktencheck_stories', JSON.stringify(stories));
+        }
+        
+        function loadResults() {
+            const saved = localStorage.getItem('faktencheck_results');
+            gameResults = saved ? JSON.parse(saved) : [];
+        }
+        
+        function saveResults() {
+            localStorage.setItem('faktencheck_results', JSON.stringify(gameResults));
+        }
+        
+        // Event Listeners
+        function setupEventListeners() {
+            // Login
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            
+            // Tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+            
+            // Stories
+            document.getElementById('add-story-btn').addEventListener('click', () => openModal());
+            document.getElementById('modal-close').addEventListener('click', closeModal);
+            document.getElementById('cancel-btn').addEventListener('click', closeModal);
+            document.getElementById('story-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'story-modal') closeModal();
+            });
+            document.getElementById('story-form').addEventListener('submit', handleSaveStory);
+            
+            // Tricks
+            document.getElementById('add-trick-btn').addEventListener('click', addTrick);
+            document.getElementById('trick-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') { e.preventDefault(); addTrick(); }
+            });
+            
+            // Export/Clear
+            document.getElementById('export-btn').addEventListener('click', exportData);
+            document.getElementById('clear-results-btn').addEventListener('click', clearResults);
+        }
+        
+        // Login/Logout
+        function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                localStorage.setItem('faktencheck_admin_logged_in', 'true');
+                showDashboard();
+                showToast('success', '✅', 'Erfolgreich angemeldet');
+            } else {
+                showToast('error', '❌', 'Falsches Passwort');
+            }
+        }
+        
+        function handleLogout() {
+            isLoggedIn = false;
+            localStorage.removeItem('faktencheck_admin_logged_in');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('password').value = '';
+        }
+        
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            updateStats();
+            renderStories();
+            renderResults();
+        }
+        
+        // Tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            
+            document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
+            if (tabId === 'results') {
+                updateResultsStats();
+            }
+        }
+        
+        // Stats
+        function updateStats() {
+            const active = stories.filter(s => s.active !== false);
+            document.getElementById('stat-total').textContent = stories.length;
+            document.getElementById('stat-active').textContent = active.length;
+            document.getElementById('stat-true').textContent = stories.filter(s => s.isTrue === true).length;
+            document.getElementById('stat-false').textContent = stories.filter(s => s.isTrue === false).length;
+            document.getElementById('stat-plays').textContent = gameResults.length;
+            
+            if (gameResults.length > 0) {
+                const avgCorrect = gameResults.reduce((sum, r) => sum + (r.correct / r.total * 100), 0) / gameResults.length;
+                document.getElementById('stat-avg').textContent = Math.round(avgCorrect) + '%';
+            }
+        }
+        
+        function updateResultsStats() {
+            document.getElementById('stat-total-plays').textContent = gameResults.length;
+            
+            if (gameResults.length > 0) {
+                const scores = gameResults.map(r => r.score);
+                document.getElementById('stat-best-score').textContent = Math.max(...scores);
+                document.getElementById('stat-avg-score').textContent = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+                document.getElementById('stat-total-correct').textContent = gameResults.reduce((sum, r) => sum + r.correct, 0);
+            }
+        }
+        
+        // Render Stories
+        function renderStories() {
+            const list = document.getElementById('stories-list');
+            
+            if (stories.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📰</div><div class="empty-state-text">Keine Stories vorhanden</div></div>';
+                return;
+            }
+            
+            list.innerHTML = stories.map(story => `
+                <div class="story-item">
+                    <div class="story-status ${story.isTrue}">${story.isTrue ? '✅' : '🚫'}</div>
+                    <div class="story-content">
+                        <div class="story-headline">${escapeHtml(story.headline)}</div>
+                        <div class="story-meta">
+                            <span>📰 ${escapeHtml(story.source)}</span>
+                            <span class="badge ${story.active !== false ? 'badge-success' : 'badge-muted'}">${story.active !== false ? 'Aktiv' : 'Inaktiv'}</span>
+                            ${story.tricks?.length ? `<span class="badge badge-danger">${story.tricks.length} Tricks</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="story-actions">
+                        <button class="btn btn-outline btn-sm" onclick="editStory(${story.id})">✏️</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteStory(${story.id})">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render Results
+        function renderResults() {
+            renderResultsList('recent-results', gameResults.slice(-5).reverse());
+            renderResultsList('all-results', [...gameResults].reverse());
+        }
+        
+        function renderResultsList(elementId, results) {
+            const list = document.getElementById(elementId);
+            
+            if (results.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🏆</div><div class="empty-state-text">Noch keine Spielergebnisse</div></div>';
+                return;
+            }
+            
+            list.innerHTML = results.map((result, index) => {
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const date = new Date(result.timestamp);
+                const dateStr = date.toLocaleDateString('de-DE') + ' ' + date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="result-item">
+                        <div class="result-rank ${rankClass}">${index + 1}</div>
+                        <div class="result-info">
+                            <div class="result-date">${dateStr}</div>
+                            <div class="result-details">
+                                ${result.correct}/${result.total} richtig • ${result.badges || 0} Badges • Max Streak: ${result.maxStreak || 0}
+                            </div>
+                        </div>
+                        <div class="result-score">${result.score}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Modal
+        function openModal(story = null) {
+            editingStoryId = story?.id || null;
+            document.getElementById('modal-title').textContent = story ? 'Story bearbeiten' : 'Neue Story';
+            
+            document.getElementById('story-headline').value = story?.headline || '';
+            document.getElementById('story-source').value = story?.source || '';
+            document.getElementById('story-isTrue').value = story?.isTrue === false ? 'false' : 'true';
+            document.getElementById('story-content').value = story?.content || '';
+            document.getElementById('story-explanation').value = story?.explanation || '';
+            document.getElementById('story-active').checked = story?.active !== false;
+            
+            currentTricks = story?.tricks ? [...story.tricks] : [];
+            renderTricks();
+            
+            document.getElementById('story-modal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('story-modal').classList.remove('active');
+            editingStoryId = null;
+            currentTricks = [];
+            document.getElementById('story-form').reset();
+        }
+        
+        // Tricks
+        function renderTricks() {
+            document.getElementById('tricks-list').innerHTML = currentTricks.map((trick, i) => `
+                <span class="trick-tag">🎭 ${escapeHtml(trick)} <button type="button" onclick="removeTrick(${i})">×</button></span>
+            `).join('');
+        }
+        
+        function addTrick() {
+            const input = document.getElementById('trick-input');
+            const trick = input.value.trim();
+            if (trick && !currentTricks.includes(trick)) {
+                currentTricks.push(trick);
+                renderTricks();
+                input.value = '';
+            }
+        }
+        
+        window.removeTrick = function(index) {
+            currentTricks.splice(index, 1);
+            renderTricks();
+        };
+        
+        // Save Story
+        function handleSaveStory(e) {
+            e.preventDefault();
+            
+            const storyData = {
+                headline: document.getElementById('story-headline').value,
+                source: document.getElementById('story-source').value,
+                isTrue: document.getElementById('story-isTrue').value === 'true',
+                content: document.getElementById('story-content').value,
+                explanation: document.getElementById('story-explanation').value,
+                tricks: currentTricks,
+                active: document.getElementById('story-active').checked
+            };
+            
+            if (editingStoryId) {
+                const index = stories.findIndex(s => s.id === editingStoryId);
+                if (index !== -1) {
+                    stories[index] = { ...stories[index], ...storyData };
+                }
+                showToast('success', '✅', 'Story aktualisiert');
+            } else {
+                const maxId = Math.max(...stories.map(s => s.id), 0);
+                stories.push({ id: maxId + 1, ...storyData });
+                showToast('success', '✅', 'Story erstellt');
+            }
+            
+            saveStories();
+            updateStats();
+            renderStories();
+            closeModal();
+        }
+        
+        // Edit/Delete Story
+        window.editStory = function(id) {
+            const story = stories.find(s => s.id === id);
+            if (story) openModal(story);
+        };
+        
+        window.deleteStory = function(id) {
+            if (!confirm('Story wirklich löschen?')) return;
+            stories = stories.filter(s => s.id !== id);
+            saveStories();
+            updateStats();
+            renderStories();
+            showToast('success', '✅', 'Story gelöscht');
+        };
+        
+        // Export
+        function exportData() {
+            const data = {
+                stories: stories,
+                results: gameResults,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `faktencheck-export-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showToast('success', '📥', 'Export heruntergeladen');
+        }
+        
+        // Clear Results
+        function clearResults() {
+            if (!confirm('Alle Spielergebnisse wirklich löschen?')) return;
+            gameResults = [];
+            saveResults();
+            updateStats();
+            updateResultsStats();
+            renderResults();
+            showToast('success', '✅', 'Ergebnisse gelöscht');
+        }
+        
+        // Toast
+        function showToast(type, icon, message) {
+            const toast = document.getElementById('toast');
+            toast.className = `toast ${type} show`;
+            document.getElementById('toast-icon').textContent = icon;
+            document.getElementById('toast-message').textContent = message;
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        
+        // Helper
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
+        
+        // Start
+        init();
+    </script>
+</body>
+</html>
